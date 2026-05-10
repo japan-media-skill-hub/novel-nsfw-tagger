@@ -1,0 +1,18 @@
+# Comprehensive chapter detection regex for Chinese web novels.
+# Matches these patterns at the START of a line:
+#   第001章  第1章  第一章  第一回  第1节  第1卷  第1篇  第1部  第1集
+#   章一  回一  节一  卷一  篇一  部一  集一
+#   番外  序章  楔子  后记  尾声  终章  完结  引子  前言  跋
+# Also allows up to 30 chars of title text after the chapter marker.
+# 
+# The pattern uses Chinese number characters: 零一二三四五六七八九十百千万两〇
+
+(?m)^[\s]*(
+    (第?[\s]*[0-9零一二三四五六七八九十百千万兩〇]+[\s]*[章回节卷篇部集])
+    |
+    ([章节卷篇部集][\s]*[0-9零一二三四五六七八九十百千万兩〇]+)
+    |
+    ([0-9零一二三四五六七八九十百千万兩〇]+[\s]*[章节回卷篇部集])
+    |
+    (番外|序章|楔子|后记|尾声|终章|完结|引子|前言|跋|卷首|卷末|插曲|间章|结局)
+)[\s]*.{0,50}$

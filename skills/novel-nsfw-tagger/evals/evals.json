@@ -1,0 +1,56 @@
+{
+  "skill_name": "novel-nsfw-tagger",
+  "evals": [
+    {
+      "id": 1,
+      "name": "heart-chapter-recall",
+      "prompt": "Run the novel-nsfw-tagger on the sample novel 放开那个女巫 and verify that all chapters marked with ❤ in the title are tagged as NSFW. The gold standard is 116 ❤ chapters that must all be detected.",
+      "expected_output": "All 116 ❤ chapters have is_nsfw=true in the summary JSON, and nsfw_ratio >= 5 for each.",
+      "files": ["放开那个女巫/04_summary.json"],
+      "assertions": [
+        {"name": "heart_chapter_recall_100pct", "description": "All 116 ❤-marked chapters detected as NSFW"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "weapon-chapter-false-positive",
+      "prompt": "Verify that known clean chapters (weapon/military themes like 第0073章火炮试射) are NOT tagged as NSFW. These chapters have keywords like 射 and 操 in non-sexual (firearm) contexts.",
+      "expected_output": "Chapter 0073 has is_nsfw=false in the summary JSON.",
+      "files": ["放开那个女巫/04_summary.json"],
+      "assertions": [
+        {"name": "weapon_chapter_not_tagged", "description": "ch0073 (火炮试射) not tagged NSFW"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "output-format-correctness",
+      "prompt": "Verify the tagged output file contains proper annotations: title lines modified with (nsfw XX), and <nsfw_start/>/<nsfw_end/> markers present inline.",
+      "expected_output": "At least one title line contains (nsfw XX) format, and <nsfw_start/> and <nsfw_end/> markers appear in tagged chapters.",
+      "files": ["放开那个女巫/*_tagged.txt"],
+      "assertions": [
+        {"name": "title_annotation_format", "description": "Titles annotated as '标题(nsfw XX)'"},
+        {"name": "inline_markers_present", "description": "<nsfw_start/> and <nsfw_end/> markers in output"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "cross-novel-consistency",
+      "prompt": "Run the tagger on 月老 novel (known adult content) and verify a high proportion of chapters are tagged NSFW.",
+      "expected_output": "More than 200 chapters tagged NSFW (novel is primarily adult content).",
+      "files": ["月老/04_summary.json"],
+      "assertions": [
+        {"name": "adult_novel_high_nsfw_rate", "description": ">200 NSFW chapters in adult-themed novel"}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "encoding_detection",
+      "prompt": "Verify that the tagger correctly detects UTF-16LE encoding for the main sample novel and produces valid output.",
+      "expected_output": "Encoding detected as UTF-16LE or produces correct line count ~92277.",
+      "files": ["放开那个女巫/01_encoding.json"],
+      "assertions": [
+        {"name": "encoding_detected_correctly", "description": "Encoding detection works for UTF-16LE novels"}
+      ]
+    }
+  ]
+}

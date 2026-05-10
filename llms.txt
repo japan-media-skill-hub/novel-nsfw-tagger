@@ -1,0 +1,37 @@
+# Novel NSFW Tagger Skill
+
+## What this project is
+Novel NSFW Tagger Skill is a pure-algorithm content tagging tool for Chinese web novels.
+It detects potentially explicit sections and writes inline markers and chapter-level tags.
+
+## Primary use cases
+- Scan Chinese novel text for NSFW passages
+- Add chapter title annotations like `(nsfw 63)`
+- Insert `<nsfw_start/>` and `<nsfw_end/>` markers
+- Generate audit artifacts for review
+
+## Core algorithm
+- Tiered lexicon with L0/L1/L2 keywords
+- Paragraph-level co-occurrence scoring
+- L2 terms only count when L0/L1 appears in same paragraph
+- Chapter NSFW ratio computed from first hot paragraph to last hot paragraph
+- Chapter considered NSFW when ratio >= 5
+
+## Entry points
+- Tagging script: `skills/novel-nsfw-tagger/scripts/tag.py`
+- Validation script: `skills/novel-nsfw-tagger/scripts/validate.py`
+- Skill spec: `skills/novel-nsfw-tagger/SKILL.md`
+- Lexicon config: `skills/novel-nsfw-tagger/config/lexicon.json`
+
+## Input/output
+- Inputs: `.txt` (UTF-8/UTF-16/GBK), `.epub` (requires optional deps)
+- Output workdir: `.novel-nsfw/<novel_name>/`
+- Main artifacts:
+  - `work.json`
+  - `<novel_name>_tagged.txt`
+
+## Safety and limitations
+- Heuristic keyword method; false positives and false negatives are possible
+- Human review is required for moderation or policy decisions
+- Do not use for illegal content or minor-involved material
+- See `DISCLAIMER.md` for full terms

@@ -1,0 +1,25 @@
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Tooling and local runtime data
+.opencode/
+.opencode/node_modules/
+.opencode/.cache/
+
+# Generated NSFW tagging outputs
+.novel-nsfw/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+example/
